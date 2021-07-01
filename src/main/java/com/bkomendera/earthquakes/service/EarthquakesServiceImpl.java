@@ -56,7 +56,7 @@ public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
             try {
                 eai.getAllMonth().forEach(f -> {
                     if (f.getId().equals(e.getKey())) {
-                        finalList.add(f.getProperties().getTitle() + " || " + Math.round(e.getValue()) + " km");
+                        finalList.add(f.getProperties().getTitle() + " || " + Math.round(e.getValue()) + " km" + "  " + f.getGeometry().getCoordinates());
                     }
                 });
             } catch (IOException ioException) {
