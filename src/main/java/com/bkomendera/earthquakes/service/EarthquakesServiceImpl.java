@@ -19,8 +19,10 @@ public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
     private EarthquakesApiInterface eai;
 
     @Override
-    public List<Feature> getEarthquakes() throws IOException {
-        return eai.getAllMonth();
+    public List<String> getEarthquakes() throws IOException {
+        List<String> list = new ArrayList<String>();
+        eai.getAllMonth().forEach(f->list.add(f.getProperties().getTitle() + " || "+ f.getGeometry().getCoordinates()));
+        return list;
     }
 
     @Override
@@ -31,8 +33,8 @@ public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
 
         //Calculating the distance in kilometers with Haversine Formula
         eai.getAllMonth().forEach(e -> {
-            float lat2 = e.getGeometry().getCoordinates().get(0);
-            float lon2 = e.getGeometry().getCoordinates().get(1);
+            float lon2 = e.getGeometry().getCoordinates().get(0);
+            float lat2 = e.getGeometry().getCoordinates().get(1);
             float R = 6371;
             float dLat = deg2rad(lat2 - lat1);
             float dLon = deg2rad(lon2 - lon1);
@@ -56,7 +58,7 @@ public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
             try {
                 eai.getAllMonth().forEach(f -> {
                     if (f.getId().equals(e.getKey())) {
-                        finalList.add(f.getProperties().getTitle() + " || " + Math.round(e.getValue()) + " km" + "  " + f.getGeometry().getCoordinates());
+                        finalList.add(f.getProperties().getTitle() + " || "+ f.getGeometry().getCoordinates() + " || " + Math.round(e.getValue()) + " km");
                     }
                 });
             } catch (IOException ioException) {

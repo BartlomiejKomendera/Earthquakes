@@ -16,29 +16,29 @@ import java.util.List;
 @Controller
 public class EarthquakesController {
 
+    private String title;
     @Autowired
     private EarthquakesServiceInterface esi;
 
     @RequestMapping("/")
     public String index(Model model) throws IOException {
-        //model.addAttribute("earthquakes", esi.getEarthquakes());
+        model.addAttribute("earthquakes", esi.getEarthquakes());
+        title="All earthquakes that happened in the last 30 days:";
+        model.addAttribute("title",title);
         return "index";
-    }
-
-    @GetMapping("/all")
-    public List<Feature> getAll() throws IOException {
-        return esi.getEarthquakes();
     }
 
     /*@GetMapping("/closest")
     public List<String> getClosest(@RequestParam Float lat, @RequestParam Float lon) throws IOException {
         return esi.getCloseEarthquakes(lat, lon);
     }*/
-    @GetMapping("/closest")
+    @GetMapping("/close")
     public String getClosest(Model model) throws IOException {
         float lat = 49.799877f;
         float lon = 19.325485f;
         model.addAttribute("earthquakes", esi.getCloseEarthquakes(lat,lon));
+        title="10 closest earthquakes to your location:";
+        model.addAttribute("title",title);
         return "index";
     }
 

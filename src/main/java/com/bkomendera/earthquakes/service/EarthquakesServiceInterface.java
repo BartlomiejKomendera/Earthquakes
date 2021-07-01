@@ -6,6 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface EarthquakesServiceInterface {
-    public List<Feature> getEarthquakes() throws IOException;
+    public List<String> getEarthquakes() throws IOException;
     public List<String> getCloseEarthquakes(float lat1, float lon1) throws IOException;
 }

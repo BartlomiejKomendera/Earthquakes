@@ -33,7 +33,7 @@ class EarthquakesApplicationTests {
 	}
 	@Test
 	void serviceInterface() throws IOException {
-		esi.getEarthquakes().forEach(f-> System.out.println("f.getId() = " + f.getId()));
+		esi.getEarthquakes().forEach(f-> System.out.println("f = " + f));
 	}
 	
 
