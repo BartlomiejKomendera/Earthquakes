@@ -1,6 +1,5 @@
-package com.bkomendera.earthquakes.data;
+package com.bkomendera.earthquakes.data.api;
 
-import com.bkomendera.earthquakes.data.api.RESTclient;
 import com.bkomendera.earthquakes.domain.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

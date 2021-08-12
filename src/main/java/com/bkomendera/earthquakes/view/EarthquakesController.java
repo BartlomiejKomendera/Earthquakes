@@ -28,18 +28,14 @@ public class EarthquakesController {
         return "index";
     }
 
-    /*@GetMapping("/closest")
-    public List<String> getClosest(@RequestParam Float lat, @RequestParam Float lon) throws IOException {
-        return esi.getCloseEarthquakes(lat, lon);
-    }*/
-    @GetMapping("/close")
+    @GetMapping("/closest")
     public String getClosest(Model model) throws IOException {
         float lat = 49.799877f;
         float lon = 19.325485f;
         model.addAttribute("earthquakes", esi.getCloseEarthquakes(lat,lon));
         title="10 closest earthquakes to your location:";
         model.addAttribute("title",title);
-        return "index";
+        return "closest";
     }
 
 }

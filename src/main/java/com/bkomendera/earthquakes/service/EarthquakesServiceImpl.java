@@ -1,12 +1,12 @@
 package com.bkomendera.earthquakes.service;
 
-import com.bkomendera.earthquakes.data.EarthquakesApiInterface;
-import com.bkomendera.earthquakes.domain.Feature;
+import com.bkomendera.earthquakes.data.api.EarthquakesApiInterface;
+import com.bkomendera.earthquakes.data.repository.EarthquakesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,23 +16,29 @@ import java.util.stream.Collectors;
 public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
 
     @Autowired
-    private EarthquakesApiInterface eai;
+    private EarthquakesApiInterface earthquakesApiInterface;
+    @Autowired
+    private EarthquakesRepository earthquakesRepository;
 
     @Override
-    public List<String> getEarthquakes() throws IOException {
-        List<String> list = new ArrayList<String>();
+    public Map<String, Point2D> getEarthquakes() throws IOException {
+        /*List<String> list = new ArrayList<String>();
         eai.getAllMonth().forEach(f->list.add(f.getProperties().getTitle() + " || "+ f.getGeometry().getCoordinates()));
-        return list;
+        return list;*/
+        Map<String, Point2D> map = new HashMap<>();
+        earthquakesApiInterface.getAllMonth().forEach(feature -> map.put(feature.getProperties().getTitle(),
+                new Point2D.Float(feature.getGeometry().getCoordinates().get(0), feature.getGeometry().getCoordinates().get(1)))
+        );
+        earthquakesRepository.saveEarthquakesRepo(map);
+        return earthquakesRepository.getEarthquakesRepo();
     }
 
     @Override
-    public List<String> getCloseEarthquakes(float lat1, float lon1) throws IOException {
+    public List<Map.Entry<String, java.lang.Float>> getCloseEarthquakes(float lat1, float lon1) throws IOException {
 
-        //HashMap with the Id and Distance from our coordinates of each earthquake
-        HashMap<String, Float> distances = new HashMap<String, Float>();
+        HashMap<String, java.lang.Float> distances = new HashMap<>();
 
-        //Calculating the distance in kilometers with Haversine Formula
-        eai.getAllMonth().forEach(e -> {
+        earthquakesApiInterface.getAllMonth().forEach(e -> {
             float lon2 = e.getGeometry().getCoordinates().get(0);
             float lat2 = e.getGeometry().getCoordinates().get(1);
             float R = 6371;
@@ -45,29 +51,14 @@ public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
             float c = (float) (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
             float distance = R * c;
 
-            //Updating the map
-            distances.put(e.getId(), distance);
+            distances.put(e.getProperties().getTitle(), distance);
         });
 
-        //Sorting the HashMap by Distance and selecting the closest 10 earthquakes as a list of entries<K,V>
-        List<Map.Entry<String, Float>> list = distances.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList()).subList(0, 10);
+        /*List<Map.Entry<String, java.lang.Float>> list = */
+        return distances.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList()).subList(0, 10);
 
-        List<String> finalList = new ArrayList<String>();
-        //Going through our 10 entries, searching for the earthquake by its Id and getting the title and distance printed
-        list.forEach(e -> {
-            try {
-                eai.getAllMonth().forEach(f -> {
-                    if (f.getId().equals(e.getKey())) {
-                        finalList.add(f.getProperties().getTitle() + " || "+ f.getGeometry().getCoordinates() + " || " + Math.round(e.getValue()) + " km");
-                    }
-                });
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
-        return finalList;
+        /*return list;*/
     }
-    //Auxiliary method to convert degrees to radians for Haversine Formula
     public static float deg2rad(float deg) {
         return (float) (deg * (Math.PI / 180));
     }

@@ -6,10 +6,18 @@
 </head>
 <body>
 <h1>Earthquakes</h1>
-<p th:text="${title}"></p>
+<div>
+    <div>
+        <a th:href="@{'all'}">All</a>
+    </div>
+    <div>
+        <a th:href="@{'closest'}">Closest</a>
+    </div>
+</div>
+<!--<p th:text="${title}"></p>
 <table th:each="feature:${earthquakes}">
     <tr th:text="${feature}"></tr>
-</table>
+</table>-->
 
 </body>
 </html>
