@@ -2,6 +2,7 @@ package com.bkomendera.earthquakes.service;
 
 import com.bkomendera.earthquakes.data.api.EarthquakesApiInterface;
 import com.bkomendera.earthquakes.data.repository.EarthquakesRepository;
+import com.bkomendera.earthquakes.domain.util.Coords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
+public class EarthquakesService implements EarthquakesServiceInterface {
 
     @Autowired
     private EarthquakesApiInterface earthquakesApiInterface;
@@ -21,13 +22,10 @@ public class EarthquakesServiceImpl implements EarthquakesServiceInterface {
     private EarthquakesRepository earthquakesRepository;
 
     @Override
-    public Map<String, Point2D> getEarthquakes() throws IOException {
-        /*List<String> list = new ArrayList<String>();
-        eai.getAllMonth().forEach(f->list.add(f.getProperties().getTitle() + " || "+ f.getGeometry().getCoordinates()));
-        return list;*/
-        Map<String, Point2D> map = new HashMap<>();
+    public Map<String, Coords> getEarthquakes() throws IOException {
+        Map<String, Coords> map = new HashMap<>();
         earthquakesApiInterface.getAllMonth().forEach(feature -> map.put(feature.getProperties().getTitle(),
-                new Point2D.Float(feature.getGeometry().getCoordinates().get(0), feature.getGeometry().getCoordinates().get(1)))
+                new Coords(feature.getGeometry().getCoordinates().get(0).floatValue(), feature.getGeometry().getCoordinates().get(1).floatValue()))
         );
         earthquakesRepository.saveEarthquakesRepo(map);
         return earthquakesRepository.getEarthquakesRepo();

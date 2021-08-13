@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class EarthquakesApiImpl implements EarthquakesApiInterface{
+public class EarthquakesApi implements EarthquakesApiInterface{
 
     @Autowired
     private RESTclient restClient;

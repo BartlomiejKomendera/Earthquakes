@@ -1,10 +1,11 @@
 package com.bkomendera.earthquakes.data.repository;
 
-import java.awt.*;
+import com.bkomendera.earthquakes.domain.util.Coords;
+
 import java.awt.geom.Point2D;
 import java.util.Map;
 
 public interface EarthquakesRepoInterface {
-    void saveEarthquakesRepo(Map<String, Point2D> map);
-    Map<String, Point2D> getEarthquakesRepo();
+    void saveEarthquakesRepo(Map<String, Coords> map);
+    Map<String, Coords> getEarthquakesRepo();
 }
