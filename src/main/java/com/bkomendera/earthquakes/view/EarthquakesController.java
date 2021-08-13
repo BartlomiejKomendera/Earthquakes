@@ -17,10 +17,8 @@ public class EarthquakesController {
     private EarthquakesServiceInterface esi;
 
     @RequestMapping("/")
-    public String index(Model model) throws IOException {
-        model.addAttribute("earthquakes", esi.getEarthquakes());
-        title="All earthquakes that happened in the last 30 days:";
-        model.addAttribute("title",title);
+    public String index() throws IOException {
+        esi.loadEarthquakes();
         return "index";
     }
 
@@ -29,9 +27,17 @@ public class EarthquakesController {
         float lat = 49.799877f;
         float lon = 19.325485f;
         model.addAttribute("earthquakes", esi.getCloseEarthquakes(lat,lon));
-        title="10 closest earthquakes to your location:";
+        title="10 closest earthquakes to your location: ";
         model.addAttribute("title",title);
         return "closest";
+    }
+
+    @GetMapping("/all")
+    public String getAll(Model model) throws IOException {
+        model.addAttribute("earthquakes", esi.getEarthquakes());
+        title="Earthquakes that were registered in the past 30 days: ";
+        model.addAttribute("title",title);
+        return "all";
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface EarthquakesServiceInterface {
+    void loadEarthquakes() throws IOException;
     Map<String, Coords> getEarthquakes() throws IOException;
     List<Map.Entry<String, Float>> getCloseEarthquakes(float lat1, float lon1) throws IOException;
 }

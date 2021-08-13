@@ -5,8 +5,6 @@ import com.bkomendera.earthquakes.data.repository.EarthquakesRepository;
 import com.bkomendera.earthquakes.domain.util.Coords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -22,23 +20,27 @@ public class EarthquakesService implements EarthquakesServiceInterface {
     private EarthquakesRepository earthquakesRepository;
 
     @Override
-    public Map<String, Coords> getEarthquakes() throws IOException {
+    public void loadEarthquakes() throws IOException {
         Map<String, Coords> map = new HashMap<>();
         earthquakesApiInterface.getAllMonth().forEach(feature -> map.put(feature.getProperties().getTitle(),
-                new Coords(feature.getGeometry().getCoordinates().get(0).floatValue(), feature.getGeometry().getCoordinates().get(1).floatValue()))
+                new Coords(feature.getGeometry().getCoordinates().get(0), feature.getGeometry().getCoordinates().get(1)))
         );
         earthquakesRepository.saveEarthquakesRepo(map);
+    }
+
+    @Override
+    public Map<String, Coords> getEarthquakes() throws IOException {
         return earthquakesRepository.getEarthquakesRepo();
     }
 
     @Override
     public List<Map.Entry<String, java.lang.Float>> getCloseEarthquakes(float lat1, float lon1) throws IOException {
 
-        HashMap<String, java.lang.Float> distances = new HashMap<>();
+        HashMap<String, Float> distances = new HashMap<>();
 
-        earthquakesApiInterface.getAllMonth().forEach(e -> {
-            float lon2 = e.getGeometry().getCoordinates().get(0);
-            float lat2 = e.getGeometry().getCoordinates().get(1);
+        earthquakesRepository.getEarthquakesRepo().entrySet().forEach(e -> {
+            float lon2 = e.getValue().getA();
+            float lat2 = e.getValue().getB();
             float R = 6371;
             float dLat = deg2rad(lat2 - lat1);
             float dLon = deg2rad(lon2 - lon1);
@@ -49,13 +51,10 @@ public class EarthquakesService implements EarthquakesServiceInterface {
             float c = (float) (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
             float distance = R * c;
 
-            distances.put(e.getProperties().getTitle(), distance);
+            distances.put(e.getKey(), distance);
         });
 
-        /*List<Map.Entry<String, java.lang.Float>> list = */
         return distances.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList()).subList(0, 10);
-
-        /*return list;*/
     }
     public static float deg2rad(float deg) {
         return (float) (deg * (Math.PI / 180));
