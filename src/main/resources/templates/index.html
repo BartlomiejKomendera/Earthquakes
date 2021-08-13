@@ -1,19 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<h1>Earthquakes</h1>
-<div>
-    <div>
-        <a th:href="@{'all'}">All</a>
-    </div>
-    <div>
-        <a th:href="@{'closest'}">Closest</a>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Earthquakes</h1>
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title alert alert-primary">
+                    <h3>See all the earthquakes registered in the past 30 days</h3>
+                </div>
+                <form th:action="@{/all}">
+                    <button class="btn btn-primary">Display All</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title alert alert-primary">
+                    <h3>See the 10 closest earthquakes to your coordinates</h3>
+                </div>
+                <form th:action="@{/closest}">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label"><h5>Latitude</h5></label>
+                        <div class="col-sm-10">
+                            <input class="form-control mb-2 mr-sm-2 w-25" type="number" step="any" th:name="latitude">
+                        </div>
+                        <label class="col-sm-2 col-form-label"><h5>Longitude</h5></label>
+                        <div class="col-sm-10">
+                            <input class="form-control mb-2 mr-sm-2 w-25" type="number" step="any" th:name="longitude">
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm offset-sm-2">
+                                <button class="btn btn-primary" type="submit">Display</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
