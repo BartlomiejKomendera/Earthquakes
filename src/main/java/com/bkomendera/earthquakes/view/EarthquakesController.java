@@ -22,8 +22,12 @@ public class EarthquakesController {
     private EarthquakesServiceInterface esi;
 
     @RequestMapping("/")
-    public String index() throws IOException {
+    public String loadData() throws IOException {
         esi.loadEarthquakes();
+        return "index";
+    }
+    @RequestMapping("/index")
+    public String backToIndex() {
         return "index";
     }
 
@@ -34,7 +38,9 @@ public class EarthquakesController {
     ) throws IOException {
         float lat = latitude;
         float lon = longitude;
-        model.addAttribute("earthquakes", esi.getCloseEarthquakes(lat,lon));
+        List<String> formatList = new LinkedList();
+        esi.getCloseEarthquakes(lat,lon).forEach( entry -> formatList.add(entry.getKey() + " - " + Math.round(entry.getValue()) + " km"));
+        model.addAttribute("earthquakes", formatList);
         title="10 closest earthquakes to your location: ";
         model.addAttribute("title",title);
         return "closest";
@@ -42,7 +48,9 @@ public class EarthquakesController {
 
     @GetMapping("/all")
     public String getAll(Model model) throws IOException {
-        model.addAttribute("earthquakes", esi.getEarthquakes());
+        List<String> formatList = new LinkedList();
+        esi.getEarthquakes().forEach((s, coords) -> formatList.add(s + " - " + coords));
+        model.addAttribute("earthquakes", formatList);
         title="Earthquakes that were registered in the past 30 days: ";
         model.addAttribute("title",title);
         return "all";

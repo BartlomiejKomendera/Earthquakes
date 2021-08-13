@@ -34,7 +34,7 @@ public class EarthquakesService implements EarthquakesServiceInterface {
     }
 
     @Override
-    public List<Map.Entry<String, java.lang.Float>> getCloseEarthquakes(float lat1, float lon1) throws IOException {
+    public List<Map.Entry<String, Float>> getCloseEarthquakes(float lat1, float lon1) throws IOException {
 
         HashMap<String, Float> distances = new HashMap<>();
 
@@ -49,9 +49,9 @@ public class EarthquakesService implements EarthquakesServiceInterface {
                             Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
                                     Math.sin(dLon / 2) * Math.sin(dLon / 2));
             float c = (float) (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-            float distance = R * c;
+            float distance = (R * c);
 
-            distances.put(e.getKey(), distance);
+            distances.put(e.getKey(),distance);
         });
 
         return distances.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList()).subList(0, 10);
