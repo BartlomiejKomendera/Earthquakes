@@ -3,7 +3,6 @@ package com.bkomendera.earthquakes.data.repository;
 import com.bkomendera.earthquakes.domain.util.Coords;
 import org.springframework.stereotype.Component;
 
-import java.awt.geom.Point2D;
 import java.util.Map;
 
 @Component
