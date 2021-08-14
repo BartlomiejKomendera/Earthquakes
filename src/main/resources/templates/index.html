@@ -12,33 +12,35 @@
         <h1>Earthquakes</h1>
         <div class="card">
             <div class="card-body">
-                <div class="card-title alert alert-primary">
+                <div class="card-title alert alert-secondary">
                     <h3>See all the earthquakes registered in the past 30 days</h3>
                 </div>
                 <form th:action="@{/all}">
-                    <button class="btn btn-primary">Display All</button>
+                    <button class="btn btn-secondary">Display All</button>
                 </form>
             </div>
         </div>
 
         <div class="card">
             <div class="card-body">
-                <div class="card-title alert alert-primary">
+                <div class="card-title alert alert-secondary">
                     <h3>See the 10 closest earthquakes to your coordinates</h3>
                 </div>
                 <form th:action="@{/closest}">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label"><h5>Latitude</h5></label>
                         <div class="col-sm-10">
-                            <input class="form-control mb-2 mr-sm-2 w-25" type="number" step="any" th:name="latitude">
+                            <input class="form-control mb-2 mr-sm-2 w-25"
+                                   type="number" step="any" th:name="latitude" required min="-180" max="180">
                         </div>
                         <label class="col-sm-2 col-form-label"><h5>Longitude</h5></label>
                         <div class="col-sm-10">
-                            <input class="form-control mb-2 mr-sm-2 w-25" type="number" step="any" th:name="longitude">
+                            <input class="form-control mb-2 mr-sm-2 w-25"
+                                   type="number" step="any" th:name="longitude" required min="-180" max="180">
                         </div>
                         <div class="form-group row">
                             <div class="col-sm offset-sm-2">
-                                <button class="btn btn-primary" type="submit">Display</button>
+                                <button class="btn btn-secondary" type="submit">Display</button>
                             </div>
                         </div>
 

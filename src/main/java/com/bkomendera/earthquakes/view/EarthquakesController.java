@@ -33,8 +33,8 @@ public class EarthquakesController {
 
     @GetMapping("/closest")
     public String getClosest(Model model,
-                             @RequestParam(value="latitude") Float latitude,
-                             @RequestParam(value="longitude") Float longitude
+                             @RequestParam(value="latitude", required = true) Float latitude,
+                             @RequestParam(value="longitude", required = true) Float longitude
     ) throws IOException {
         float lat = latitude;
         float lon = longitude;
