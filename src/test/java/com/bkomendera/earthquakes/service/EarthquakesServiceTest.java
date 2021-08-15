@@ -9,6 +9,7 @@ import com.bkomendera.earthquakes.domain.util.Coords;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -38,8 +39,8 @@ class EarthquakesServiceTest {
     }
 
     @Test
+    @DisplayName("should execute the logic and call the save() repo method")
     void loadEarthquakes() throws IOException {
-
         //given
         Feature testFeature = Mockito.mock(Feature.class);
         Properties testProperties = Mockito.mock(Properties.class);
@@ -51,7 +52,6 @@ class EarthquakesServiceTest {
         testCoordsList.add(19f);
         Map<String,Coords> testMap = new HashMap<>();
         testMap.put("Test title", new Coords(45f,19f));
-
         //when
         Mockito.when(earthquakesApiInterface.getAllMonth()).thenReturn(testList);
         Mockito.when(testFeature.getGeometry()).thenReturn(testGeometry);
@@ -59,20 +59,30 @@ class EarthquakesServiceTest {
         Mockito.when(testGeometry.getCoordinates()).thenReturn(testCoordsList);
         Mockito.when(testProperties.getTitle()).thenReturn("Test title");
         earthquakesService.loadEarthquakes();
-
         //then
         Mockito.verify(earthquakesRepository).saveEarthquakesRepo(testMap);
-
     }
 
     @Test
-    @Disabled
-    void getEarthquakes() {
+    @DisplayName("should call the get() repo method")
+    void getEarthquakes() throws IOException {
+        earthquakesService.getEarthquakes();
+        Mockito.verify(earthquakesRepository).getEarthquakesRepo();
     }
 
     @Test
-    @Disabled
-    void getCloseEarthquakes() {
+    @DisplayName("should ")
+    void getCloseEarthquakes() throws IOException {
+        Map<String,Coords> testMap = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            testMap.put("Test title" + i, new Coords(45 + i ,19 + i));
+        }
+
+        Mockito.when(earthquakesRepository.getEarthquakesRepo()).thenReturn(testMap);
+        earthquakesService.getCloseEarthquakes(32f,23f);
+        List testList = new LinkedList(earthquakesService.getCloseEarthquakes(32f,23f));
+        Assertions.assertThat(testList.size()).isEqualTo(10);
+
     }
 
     @Test
