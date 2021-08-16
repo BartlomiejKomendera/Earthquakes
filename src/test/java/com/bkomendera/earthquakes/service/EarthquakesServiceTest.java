@@ -12,13 +12,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.util.*;
@@ -71,17 +68,18 @@ class EarthquakesServiceTest {
     }
 
     @Test
-    @DisplayName("should ")
+    @DisplayName("should return a computed list with 10 elements")
     void getCloseEarthquakes() throws IOException {
         Map<String,Coords> testMap = new HashMap<>();
         for (int i = 0; i < 10; i++) {
-            testMap.put("Test title" + i, new Coords(45 + i ,19 + i));
+            float randomN = (float) Math.random();
+            testMap.put("Test title" + i, new Coords(45 + randomN ,19 + randomN));
         }
 
         Mockito.when(earthquakesRepository.getEarthquakesRepo()).thenReturn(testMap);
         earthquakesService.getCloseEarthquakes(32f,23f);
-        List testList = new LinkedList(earthquakesService.getCloseEarthquakes(32f,23f));
-        Assertions.assertThat(testList.size()).isEqualTo(10);
+        List<Map.Entry<String, Float>> testResultList = new LinkedList<>(earthquakesService.getCloseEarthquakes(32f,23f));
+        Assertions.assertThat(testResultList.size()).isEqualTo(10);
 
     }
 
