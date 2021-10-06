@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Controller
 public class EarthquakesController {
@@ -21,7 +23,14 @@ public class EarthquakesController {
 
     @RequestMapping("/")
     public String loadData() throws IOException {
-        esi.loadEarthquakes();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(()->{
+            try {
+                esi.loadEarthquakes();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         return "index";
     }
     @RequestMapping("/index")
@@ -33,7 +42,7 @@ public class EarthquakesController {
     public String getClosest(Model model,
                              @RequestParam(value="latitude", required = true) Float latitude,
                              @RequestParam(value="longitude", required = true) Float longitude
-    ) throws IOException {
+    ) throws IOException, InterruptedException {
         float lat = latitude;
         float lon = longitude;
         List<String> formatList = new LinkedList();
@@ -45,7 +54,7 @@ public class EarthquakesController {
     }
 
     @GetMapping("/all")
-    public String getAll(Model model) throws IOException {
+    public String getAll(Model model) throws IOException, InterruptedException {
         List<String> formatList = new LinkedList();
         esi.getEarthquakes().forEach((s, coords) -> formatList.add(s + " - " + coords));
         model.addAttribute("earthquakes", formatList);

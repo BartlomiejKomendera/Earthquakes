@@ -62,14 +62,14 @@ class EarthquakesServiceTest {
 
     @Test
     @DisplayName("should call the get() repo method")
-    void getEarthquakes() throws IOException {
+    void getEarthquakes() throws IOException, InterruptedException {
         earthquakesService.getEarthquakes();
         Mockito.verify(earthquakesRepository).getEarthquakesRepo();
     }
 
     @Test
     @DisplayName("should return a computed list with 10 elements")
-    void getCloseEarthquakes() throws IOException {
+    void getCloseEarthquakes() throws IOException, InterruptedException {
         Map<String,Coords> testMap = new HashMap<>();
         for (int i = 0; i < 10; i++) {
             float randomN = (float) Math.random();
